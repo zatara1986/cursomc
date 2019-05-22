@@ -13,6 +13,7 @@ import com.wellingtonthiago.cursomc.domain.Cidade;
 import com.wellingtonthiago.cursomc.domain.Cliente;
 import com.wellingtonthiago.cursomc.domain.Endereco;
 import com.wellingtonthiago.cursomc.domain.Estado;
+import com.wellingtonthiago.cursomc.domain.ItemPedido;
 import com.wellingtonthiago.cursomc.domain.Pagamento;
 import com.wellingtonthiago.cursomc.domain.PagamentoComBoleto;
 import com.wellingtonthiago.cursomc.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.wellingtonthiago.cursomc.repositories.CidadeRepository;
 import com.wellingtonthiago.cursomc.repositories.ClienteRepository;
 import com.wellingtonthiago.cursomc.repositories.EnderecoRepository;
 import com.wellingtonthiago.cursomc.repositories.EstadoRepository;
+import com.wellingtonthiago.cursomc.repositories.ItemPedidoRepository;
 import com.wellingtonthiago.cursomc.repositories.PagamentoRepository;
 import com.wellingtonthiago.cursomc.repositories.PedidoRepository;
 import com.wellingtonthiago.cursomc.repositories.ProdutoRepository;
@@ -55,6 +57,9 @@ public class CursomcApplication implements CommandLineRunner{
 	
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -98,7 +103,7 @@ public class CursomcApplication implements CommandLineRunner{
 		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 300", "Jardim", "38220834", cli1, c1);
 		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "38777012", cli1, c2);
 		
-		//cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
 		
 		clienteRepository.save(Arrays.asList(cli1));
 		enderecoRepository.save(Arrays.asList(e1,e2));
@@ -118,6 +123,19 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		pedidoRepository.save(Arrays.asList(ped1, ped2));
 		pagamentoRepository.save(Arrays.asList(pagto1,pagto2));
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepository.save(Arrays.asList(ip1,ip2, ip3));
 	}
 
 }
